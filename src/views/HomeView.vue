@@ -1,10 +1,10 @@
 <template>
   <!-- loading -->
   <div
-    class="max-w-[640px] m-auto bg-yellow-200 border-yellow-300 border-2 px-0 py-1.5 text-center"
+    class="max-w-[640px] m-auto mt-2.5 text-white bg-teal-500 px-0 py-1.5 text-center"
     v-if="postStore.loading"
   >
-    Loading Tasks...
+    Loading Posts...
   </div>
 
   <!-- Posts list -->

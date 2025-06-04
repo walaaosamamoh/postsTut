@@ -1,17 +1,25 @@
 <template>
-  <div class="bg-white rounded-sm mt-5 shadow-md p-5 border-teal-500 border-2 cursor-pointer">
-    <h2 class="font-bold">Post {{ post.id }}</h2>
+  <div class="container">
+    <div class="bg-white rounded-md mt-5 shadow-md p-5 border-teal-500 border-2 cursor-pointer"
+    @click="goTo(post.id)">
+    <h2 class="font-bold text-gray-700 text-[18px]">Post {{ post.id }}</h2>
     <div class="flex justify-between items-center">
-      <h3 class="text-gray-600">{{ post.title }}</h3>
+      <h3 class="text-gray-600 capitalize">{{ post.title }}</h3>
       <i class="material-icons !text-[20px] text-teal-500 cursor-pointer">
         delete
       </i>
     </div>
   </div>
+  </div>
 </template>
 
 <script>
   export default {
-    props:['post']
+    props:['post'],
+    methods:{
+      goTo(postId){
+        this.$router.push(`/post/${postId}`)
+      }
+    }
   }
 </script>
