@@ -3,6 +3,7 @@ import {defineStore} from 'pinia'
 export const usePostStore = defineStore('postStore',{
   state: ()=>({
     posts: [],
+    deletedPosts: new Set(),
     currentPost: null,
     loading: false
   }),
@@ -19,7 +20,7 @@ export const usePostStore = defineStore('postStore',{
         try{
           const res = await fetch('https://jsonplaceholder.typicode.com/posts');
           const data = await res.json();
-          this.posts = data;
+          this.posts = data.filter(p=>{return !this.deletedPosts.has(p.id)});
         }catch(err){
           console.log('error fetching posts', err)
         }
@@ -40,6 +41,23 @@ export const usePostStore = defineStore('postStore',{
         }
      
       this.loading = false
+    },
+
+    //delete post
+    async deletePost(id){
+      this.deletedPosts.add(id);
+      this.posts= this.posts.filter((post)=>{
+        return post.id !== id
+        });
+
+      try{
+          await fetch('https://jsonplaceholder.typicode.com/posts/'+ id, {
+          method: 'DELETE'
+        })
+        console.log('deleted')
+      }catch(err){
+        console.log('error deleting post', err)
+      }
     }
   }
 })

@@ -9,9 +9,9 @@
 
   <!-- Posts list -->
   <div class="max-w-[700px] m-auto mt-4">
-    <p >There are {{ postStore.totalCount }} posts</p>
+    <p>There are {{ postStore.totalCount }} posts</p>
     <div v-for="post in postStore.posts" :key="post.id">
-      <PostDetails :post="post"/>
+      <PostDetails :post="post" :postStore="postStore" />
     </div>
   </div>
 </template>
@@ -20,13 +20,13 @@
 import { usePostStore } from '@/stores/PostStore'
 import PostDetails from '../components/PostDetails.vue'
 export default {
-  components:{PostDetails},
+  components: { PostDetails },
   data() {
     return {
       postStore: usePostStore(),
     }
   },
-  created(){
+  created() {
     this.postStore.getPosts()
   }
 }
