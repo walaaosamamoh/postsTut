@@ -2,7 +2,6 @@
   <div class="container">
     <!-- post -->
     <div v-if="post" class="max-w-[800px] bg-white m-auto p-5 mt-6 rounded-md">
-      <h2 class="font-bold text-teal-500 text-2xl mb-3">Post {{ post.id }}</h2>
       <h3 class="font-bold text-gray-600 text-xl mb-2 capitalize">{{ post.title }}</h3>
       <p class="text-gray-500">{{ post.body }}</p>
     </div>
