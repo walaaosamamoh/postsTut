@@ -4,6 +4,8 @@ export const usePostStore = defineStore('postStore',{
   state: ()=>({
     posts: [],
     deletedPosts: new Set(),
+    updatedPostsid: new Set(),
+    updatedPosts:[],
     addedPosts: [],
     currentPost: null,
     loading: false
@@ -17,16 +19,17 @@ export const usePostStore = defineStore('postStore',{
     // get all posts
     async getPosts(){
       this.loading = true
-      
+
         try{
           const res = await fetch('https://jsonplaceholder.typicode.com/posts');
           const data = await res.json();
           this.posts = data.filter(p=>{return !this.deletedPosts.has(p.id)});
-          this.posts= [...this.posts, ...this.addedPosts]
+          this.posts = this.posts.filter(p=>{return !this.updatedPostsid.has(p.id)});
+          this.posts= [...this.posts, ...this.addedPosts, ...this.updatedPosts]
         }catch(err){
           console.log('error fetching posts', err)
         }
-     
+
       this.loading = false
     },
 
@@ -38,7 +41,7 @@ export const usePostStore = defineStore('postStore',{
         return
       }
       this.loading = true
-      
+
         try{
           const res = await fetch('https://jsonplaceholder.typicode.com/posts/'+ id);
           const data = await res.json();
@@ -46,7 +49,7 @@ export const usePostStore = defineStore('postStore',{
         }catch(err){
           console.log('error fetching post', err)
         }
-     
+
       this.loading = false
     },
 
@@ -85,5 +88,35 @@ export const usePostStore = defineStore('postStore',{
         console.log('error adding post', err)
         }
     },
+
+    //update post
+    async updatePost(post){
+      this.updatedPostsid.add(post.id)
+      
+      if(this.addedPosts.some(p=>p.id===post.id)){
+        this.addedPosts = this.addedPosts.map(p =>
+        p.id === post.id ? {...p, ...post} : p);
+      }else {
+        this.updatedPosts.push(post)
+      }
+      
+      if(this.posts.some(p=>p.id===post.id)){
+        this.posts = this.posts.map(p =>
+        p.id === post.id ? {...p, ...post} : p)
+      }
+
+      try{
+        await fetch('https://jsonplaceholder.typicode.com/posts/' + post.id,{
+          method: 'PATCH',
+          body: JSON.stringify({
+            title: post.title,
+            body: post.body
+          }),
+          headers: { 'Content-Type': 'application/json' },
+        })
+      }catch(err){
+        console.log('error updating post', err)
+        }
+    }
   }
 })

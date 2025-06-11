@@ -26,7 +26,7 @@ export default {
     handleSubmit(){
       if(this.title.length>0 && this.body.length>0){
         this.postStore.addPost({
-          id: Math.floor(Math.random()*1000)+100,
+          id: this.postStore.totalCount + 1,
           title: this.title,
           body: this.body
         })
